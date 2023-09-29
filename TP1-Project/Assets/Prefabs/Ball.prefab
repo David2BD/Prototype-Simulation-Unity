@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 5353818960978619329}
   - component: {fileID: -70689883098761106}
   - component: {fileID: -7008804573758914932}
-  - component: {fileID: 2136639751158557214}
+  - component: {fileID: 5696215661026130336}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2136639751158557214
+--- !u!114 &5696215661026130336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,3 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59841bc1de4681a49af61f4702cb18ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceleration: {x: 1.005, y: -9.81, z: 0}
+  movementSpeed: {x: 0, y: 0, z: 0}
+  gameLoopScript: {fileID: 0}
