@@ -7,8 +7,6 @@ public class GameLoop : MonoBehaviour
 {
     public int playerTurn;
     public GameObject ball;
-    public Vector3 randomForce = new Vector3(0f,0f,0f);
-
     
     
     // Start is called before the first frame update

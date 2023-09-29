@@ -6,10 +6,11 @@ using Random = System.Random;
 
 public class Ball : MonoBehaviour
 {
-    public Vector3 movementSpeed = new Vector3(0f,0f,0f);
     public Vector3 gravitation = new Vector3(0f, -9.81f, 0f);
+    public Vector3 acceleration = new Vector3(0f,0f,0f);
+    public Vector3 randomSpeed = new Vector3(0f,0f,0f);
     public Vector3 randomForce = new Vector3(0f,0f,0f);
-    public int masse = 1;
+    public float masse = 1f;
     public GameLoop gameLoopScript;
     
     // Start is called before the first frame update
@@ -17,31 +18,37 @@ public class Ball : MonoBehaviour
     {
         gameLoopScript = GameObject.FindObjectOfType(typeof(GameLoop)) as GameLoop;
         
-        // genere une force initiale
-        randomForce = new Vector3(UnityEngine.Random.Range(-6f, 6f),
-        UnityEngine.Random.Range(-6f, 6f),
-        UnityEngine.Random.Range(-6f, 6f));
+        // genere une force aleatoire
+        randomForce = new Vector3(UnityEngine.Random.Range(-5f, 5f),
+            UnityEngine.Random.Range(-5f, 5f),
+            UnityEngine.Random.Range(-5f, 5f));
+        
+        // genere une velocite initiale
+        // semi aleatoire pour aider a avoir plus de collisions
+        if (transform.position.x > 0)
+        {
+            randomSpeed = new Vector3(UnityEngine.Random.Range(-10f, 2f),
+                UnityEngine.Random.Range(-10f, 5f),
+                UnityEngine.Random.Range(-10f, 10f));
+        }
+        else
+        {
+            randomSpeed = new Vector3(UnityEngine.Random.Range(-2f, 10f),
+                UnityEngine.Random.Range(-10f, 5f),
+                UnityEngine.Random.Range(-10f, 10f));
+        }
+        
+        
+        acceleration += (randomForce + gravitation) / masse;
     }
     // Update is called once per frame
     void Update()
     {
-        /*
-        // gravite est opposee
-        if (movementSpeed.y > 0)
-        {
-            transform.position += movementSpeed * Time.deltaTime + (0.5f * -gravitation * (Time.deltaTime*Time.deltaTime));
-            movementSpeed += gravitation * Time.deltaTime;
-        }
-        // gravite est avec
-        else
-        {
-            transform.position += movementSpeed * Time.deltaTime + (0.5f * gravitation * (Time.deltaTime*Time.deltaTime));
-            movementSpeed += gravitation * Time.deltaTime;
-        }
-        */
+        masse = UnityEngine.Random.Range(1f, 5f);
+        transform.position += randomSpeed * Time.deltaTime + (0.5f * acceleration * (Time.deltaTime*Time.deltaTime));
+        randomSpeed += acceleration * Time.deltaTime;
+        acceleration = (randomForce + gravitation) / masse;
         
-        transform.position += movementSpeed * Time.deltaTime + (0.5f * randomForce * (Time.deltaTime*Time.deltaTime));
-        movementSpeed += randomForce * Time.deltaTime;
         
         if (transform.position.x < -20 || transform.position.y < -20 || transform.position.z < -20 ||
             transform.position.x > 20 || transform.position.y > 20 || transform.position.z > 20)
