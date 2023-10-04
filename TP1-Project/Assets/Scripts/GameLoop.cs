@@ -22,13 +22,13 @@ public class GameLoop : MonoBehaviour
         {
             if (playerTurn == 1 && Input.GetMouseButtonDown(0))
             {
-                Instantiate(ball, new Vector3(-5, 3, 0), Quaternion.identity);
+                Instantiate(ball, new Vector3(-5, 5, 5), Quaternion.identity);
                 playerTurn = 2;
 
             }
             else if (playerTurn == 2 && Input.GetMouseButtonDown(0))
             {
-                Instantiate(ball, new Vector3(5, 3, 0), Quaternion.identity);
+                Instantiate(ball, new Vector3(5, 5, 5), Quaternion.identity);
                 playerTurn = 1;
             }
         }

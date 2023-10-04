@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4234947564116965054}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -96,6 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59841bc1de4681a49af61f4702cb18ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gravitation: {x: 0, y: -9.81, z: 0}
   acceleration: {x: 1.005, y: -9.81, z: 0}
-  movementSpeed: {x: 0, y: 0, z: 0}
-  gameLoopScript: {fileID: 0}
+  speed: {x: 0, y: 0, z: 0}
+  force: {x: 0, y: 0, z: 0}
+  masse: 1
