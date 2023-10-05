@@ -100,4 +100,6 @@ MonoBehaviour:
   acceleration: {x: 1.005, y: -9.81, z: 0}
   speed: {x: 0, y: 0, z: 0}
   force: {x: 0, y: 0, z: 0}
+  normalMur: {x: 1, y: 0, z: 0}
+  coeficientConservation: 0.8
   masse: 1
