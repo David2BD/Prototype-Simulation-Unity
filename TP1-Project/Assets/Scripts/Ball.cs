@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     public Vector3 force = new Vector3(0f,0f,0f);
     public Vector3 normalMur = new Vector3(1f, 0f, 0f);
     public float coeficientConservation = 0.8f;
-    public float masse = 1f;
+    public float masse = 10f;
     private float radius = 0.5f;
     //public GameLoop gameLoopScript;
     
@@ -23,21 +23,22 @@ public class Ball : MonoBehaviour
     void Start()
     {
         
-        // genere une force aleatoire
+        // genere une velocite initiale
+        // semi aleatoire pour aider a avoir plus de collisions
         if (transform.position.x > 0)
         {
-            force = new Vector3(UnityEngine.Random.Range(-30f, -20f),
-                UnityEngine.Random.Range(15f, 15f),
-                UnityEngine.Random.Range(0f, 0f));
+            speed = new Vector3(UnityEngine.Random.Range(-10f, -5f),
+                UnityEngine.Random.Range(-5f, 5f),
+                UnityEngine.Random.Range(-5f, 5f));
         }
         else
         {
-            force = new Vector3(UnityEngine.Random.Range(20f, 30f),
-                UnityEngine.Random.Range(15f, 15f),
-                UnityEngine.Random.Range(0f, 0f));
+            speed = new Vector3(UnityEngine.Random.Range(5f, 10f),
+                UnityEngine.Random.Range(-5f, 5f),
+                UnityEngine.Random.Range(-5f, 5f));
         }
-        
-        acceleration += (force + gravitation) / masse;
+
+        acceleration = (gravitation) / masse;
     }
     // Update is called once per frame
     void Update()
@@ -46,8 +47,8 @@ public class Ball : MonoBehaviour
         
         
         
-        if (transform.position.x < -20 || transform.position.y < -20 || transform.position.z < -20 ||
-            transform.position.x > 20 || transform.position.y > 20 || transform.position.z > 20)
+        if (transform.position.x < -30 || transform.position.y < -30 || transform.position.z < -30 ||
+            transform.position.x > 30 || transform.position.y > 30 || transform.position.z > 30)
         {
             Destroy(gameObject);
         }
@@ -56,10 +57,10 @@ public class Ball : MonoBehaviour
         
         transform.position += speed * Time.deltaTime + (0.5f * acceleration * (Time.deltaTime*Time.deltaTime));
         speed += acceleration * Time.deltaTime;
-        acceleration = (force + gravitation) / masse;
+        acceleration = (gravitation) / masse;
         
         //ligne bleu pour voir le vecteur de velocite
-        Debug.DrawLine(transform.position, speed, Color.blue);
+        //Debug.DrawLine(transform.position, speed, Color.blue);
     }
 
     void collideWithWall()
@@ -84,9 +85,9 @@ public class Ball : MonoBehaviour
             }
             
             force = CalculRebound(speed, normalMur);
-            acceleration = (force + gravitation) / masse;
+            speed = (force) / masse;
             //pour reset la vitesse avant dappliquer la nouvelle force
-            speed = new Vector3(0, 0, 0);
+            //speed = new Vector3(0, 0, 0);
         }
         
     }
