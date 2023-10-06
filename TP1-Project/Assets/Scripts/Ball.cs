@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Random = System.Random;
+using Vector3 = UnityEngine.Vector3;
 
 public class Ball : MonoBehaviour
 {
@@ -14,7 +17,7 @@ public class Ball : MonoBehaviour
     public Vector3 force = new Vector3(0f,0f,0f);
     public Vector3 normalMur = new Vector3(1f, 0f, 0f);
     public float coeficientConservation = 0.8f;
-    public float masse = 10f;
+    public float masse = 1f;
     private float radius = 0.5f;
     //public GameLoop gameLoopScript;
     
@@ -22,38 +25,20 @@ public class Ball : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        // genere une velocite initiale
-        // semi aleatoire pour aider a avoir plus de collisions
-        if (transform.position.x > 0)
-        {
-            speed = new Vector3(UnityEngine.Random.Range(-10f, -5f),
-                UnityEngine.Random.Range(-5f, 5f),
-                UnityEngine.Random.Range(-5f, 5f));
-        }
-        else
-        {
-            speed = new Vector3(UnityEngine.Random.Range(5f, 10f),
-                UnityEngine.Random.Range(-5f, 5f),
-                UnityEngine.Random.Range(-5f, 5f));
-        }
-
+        // velocite initiale
+        speed = 
+            (transform.position.x > 0) ? 
+            randomVector(-20f,20f,10f,10f) : 
+            randomVector(15f,25f,10f,10f);
         acceleration = (gravitation) / masse;
     }
     // Update is called once per frame
     void Update()
     {
-        //masse = UnityEngine.Random.Range(1f, 5f);
-        
-        
-        
-        if (transform.position.x < -30 || transform.position.y < -30 || transform.position.z < -30 ||
-            transform.position.x > 30 || transform.position.y > 30 || transform.position.z > 30)
-        {
-            Destroy(gameObject);
-        }
-        
+        //masse = UnityEngine.Random.Range(1f        
         collideWithWall();
+        collideGround();
+        collideOutsideWall(10, 10);
         
         transform.position += speed * Time.deltaTime + (0.5f * acceleration * (Time.deltaTime*Time.deltaTime));
         speed += acceleration * Time.deltaTime;
@@ -61,6 +46,14 @@ public class Ball : MonoBehaviour
         
         //ligne bleu pour voir le vecteur de velocite
         //Debug.DrawLine(transform.position, speed, Color.blue);
+    }
+
+    Vector3 randomVector(float minX, float maxX, float y, float z)
+    {
+        Vector3 vector = new Vector3(UnityEngine.Random.Range(minX, maxX),
+            UnityEngine.Random.Range(-y, y),
+            UnityEngine.Random.Range(-z, z));
+        return vector;
     }
 
     void collideWithWall()
@@ -90,6 +83,58 @@ public class Ball : MonoBehaviour
             //speed = new Vector3(0, 0, 0);
         }
         
+    }
+
+    void collideOutsideWall(float limitX, float limitZ)
+    {
+        if (transform.position.x < -limitX || transform.position.z < -limitZ ||
+            transform.position.x > limitX || transform.position.z > limitZ)
+        {
+            Vector3 newPosition;
+            Vector3 normale;
+            if (transform.position.x > limitX)
+            {
+                newPosition = new Vector3(limitX, transform.position.y, transform.position.z);
+                normale = new Vector3(1, 0, 0);
+            }
+            else if (transform.position.x < -limitX)
+            {
+                newPosition = new Vector3(-limitX, transform.position.y, transform.position.z);
+                normale = new Vector3(1, 0, 0);
+            }
+            else if (transform.position.z > limitZ)
+            {
+                newPosition = new Vector3(transform.position.x, transform.position.y, limitZ);
+                normale = new Vector3(0, 0, 1);
+            }
+            else
+            {
+                newPosition = new Vector3(transform.position.x, transform.position.y, -limitZ);
+                normale = new Vector3(0, 0, 1);
+            }
+
+            transform.position = newPosition;
+            speed = calculGlissement(speed, normale);
+        }
+    }
+
+    void collideGround()
+    {
+        if (transform.position.y < 0)
+        {
+            Vector3 newPosition = new Vector3(transform.position.x,0, transform.position.z);
+            transform.position = newPosition;
+            speed = new Vector3(0, 0, 0);
+            acceleration = new Vector3(0, 0, 0);
+            Destroy(gameObject);
+        }
+    }
+
+    private Vector3 calculGlissement(Vector3 initialVelocity, Vector3 normal)
+    {
+        float dotProduct = Vector3.Dot(initialVelocity, normal);
+        Vector3 newVelocity = initialVelocity - dotProduct * normal;
+        return newVelocity;
     }
     
     //formule de rebound des notes de cours
