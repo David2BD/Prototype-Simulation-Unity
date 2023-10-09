@@ -19,6 +19,8 @@ public class Ball : MonoBehaviour
     public float coeficientConservation = 0.8f;
     public float masse = 1f;
     private float radius = 0.5f;
+    private GameObject midWall;
+    
     //public GameLoop gameLoopScript;
     
     
@@ -31,6 +33,7 @@ public class Ball : MonoBehaviour
             randomVector(-20f,20f,10f,10f) : 
             randomVector(15f,25f,10f,10f);
         acceleration = (gravitation) / masse;
+        midWall = GameObject.Find("Wall");
     }
     // Update is called once per frame
     void Update()
@@ -60,9 +63,9 @@ public class Ball : MonoBehaviour
     {
         //les dimension du mur
         if (
-                transform.position.x - radius <= 1 && transform.position.x + radius >= 0
-                && transform.position.y - radius <= 10 && transform.position.y + radius >= 0
-                && transform.position.z - radius <= 10 && transform.position.z + radius >= 0
+                transform.position.x - radius <= midWall.transform.position.x + 0.5 && transform.position.x + radius >= midWall.transform.position.x - 0.5
+                && transform.position.y - radius <= midWall.transform.position.y + 5 && transform.position.y + radius >= midWall.transform.position.y - 5
+                && transform.position.z - radius <= midWall.transform.position.z + 5 && transform.position.z + radius >= midWall.transform.position.z - 5
            )
         {
             //pour ressortir du mur pour pas etre ne collision le prochain frame
