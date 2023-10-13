@@ -38,7 +38,6 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //masse = UnityEngine.Random.Range(1f        
         collideWithWall();
         collideGround();
         collideOutsideWall(10, 10);
@@ -90,29 +89,30 @@ public class Ball : MonoBehaviour
 
     void collideOutsideWall(float limitX, float limitZ)
     {
-        if (transform.position.x < -limitX || transform.position.z < -limitZ ||
-            transform.position.x > limitX || transform.position.z > limitZ)
+        // on considere les murs limites comme des plans sur les axes
+        if (transform.position.x - radius < -limitX || transform.position.z - radius < -limitZ ||
+            transform.position.x + radius > limitX || transform.position.z + radius > limitZ)
         {
             Vector3 newPosition;
             Vector3 normale;
-            if (transform.position.x > limitX)
+            if (transform.position.x + radius > limitX)
             {
-                newPosition = new Vector3(limitX, transform.position.y, transform.position.z);
+                newPosition = new Vector3(limitX - radius, transform.position.y, transform.position.z);
                 normale = new Vector3(1, 0, 0);
             }
-            else if (transform.position.x < -limitX)
+            else if (transform.position.x - radius < -limitX)
             {
-                newPosition = new Vector3(-limitX, transform.position.y, transform.position.z);
+                newPosition = new Vector3(-limitX + radius, transform.position.y, transform.position.z);
                 normale = new Vector3(1, 0, 0);
             }
-            else if (transform.position.z > limitZ)
+            else if (transform.position.z + radius > limitZ)
             {
-                newPosition = new Vector3(transform.position.x, transform.position.y, limitZ);
+                newPosition = new Vector3(transform.position.x, transform.position.y, limitZ - radius);
                 normale = new Vector3(0, 0, 1);
             }
             else
             {
-                newPosition = new Vector3(transform.position.x, transform.position.y, -limitZ);
+                newPosition = new Vector3(transform.position.x, transform.position.y, -limitZ + radius);
                 normale = new Vector3(0, 0, 1);
             }
 
@@ -123,9 +123,10 @@ public class Ball : MonoBehaviour
 
     void collideGround()
     {
-        if (transform.position.y < 0)
+        // le sol est un plan sur axe XZ avec une normale en y
+        if (transform.position.y - radius <= 0)
         {
-            Vector3 newPosition = new Vector3(transform.position.x,0, transform.position.z);
+            Vector3 newPosition = new Vector3(transform.position.x,radius, transform.position.z);
             transform.position = newPosition;
             speed = new Vector3(0, 0, 0);
             acceleration = new Vector3(0, 0, 0);
